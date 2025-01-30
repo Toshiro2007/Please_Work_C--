@@ -8,19 +8,19 @@
   // left motor group
 pros::MotorGroup left_motor_group({1, 2, 3}, pros::MotorGears::blue);
 // right motor group
-pros::MotorGroup right_motor_group({-11 -12, -13}, pros::MotorGears::blue);
+pros::MotorGroup right_motor_group({-11, -12, -13}, pros::MotorGears::blue);
 
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&left_motor_group, // left motor group
                               &right_motor_group, // right motor group
-                              12, // 10 inch track width
-                              lemlib::Omniwheel::NEW_325, // using new 4" omnis
-                              600, // drivetrain rpm is 360
+                              12.5, // 10 inch track width
+                              lemlib::Omniwheel::NEW_275, // using new 4" omnis
+                              450, // drivetrain rpm is 360
                               2 // horizontal drift is 2 (for now)
 );
 
 // imu
-pros::Imu imu(4);
+pros::Imu imu(-4);
 
 
 // odometry settings //inertial sensor
@@ -89,11 +89,11 @@ void opcontrol() {
     while (true) {
         // get left y and right x positions
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
-        int leftX = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X);
+        int leftX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y);
 
         // move the robot
         // prioritize steering slightly
-        chassis.arcade(leftY, leftX, false, 0.75);
+        chassis.tank(leftY, leftX, false, 0.75);
 
         // delay to save resources
         pros::delay(25);
@@ -155,7 +155,7 @@ if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
 
 
 {
-pros::Motor intakeMotor(19); // intake port 1
+pros::Motor intakeMotor(1); // intake port 1
 // Intake forward when Button R1 is pressed
         if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
             intakeMotor.move(127); // Full power forward
